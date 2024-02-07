@@ -137,9 +137,10 @@ public class Main extends Application {
             }
         }
 
-        polygons.keySet().forEach(key -> {
+        polygons.forEach((key,value) -> {
             if(!world.getEntities().contains(key)){
-                gameWindow.getChildren().remove(polygons.get(key));
+                gameWindow.getChildren().remove(value);
+                polygons.remove(key);
             }
         });
 
