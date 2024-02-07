@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.stream.Collectors.toList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -39,6 +40,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
+        window.setResizable(false);
         System.out.println("logging start");
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow = new Pane();
@@ -130,9 +132,17 @@ public class Main extends Application {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             if(!polygons.containsKey(entity)) {
                 polygons.put(entity, polygon);
+
                 gameWindow.getChildren().add(polygon);
             }
         }
+
+        polygons.keySet().forEach(key -> {
+            if(!world.getEntities().contains(key)){
+                gameWindow.getChildren().remove(polygons.get(key);
+            }
+        });
+
 
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
