@@ -29,6 +29,8 @@ public class Main extends Application {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
+
+    private Pane gameWindow;
     
 
     public static void main(String[] args) {
@@ -37,8 +39,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage window) throws Exception {
+        System.out.println("logging start");
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
-        Pane gameWindow = new Pane();
+        gameWindow = new Pane();
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(text);
 
@@ -53,6 +56,9 @@ public class Main extends Application {
             if (event.getCode().equals(KeyCode.UP)) {
                 gameData.getKeys().setKey(GameKeys.UP, true);
             }
+            if (event.getCode().equals(KeyCode.SPACE)) {
+                gameData.getKeys().setKey(GameKeys.SPACE, true);
+            }
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode().equals(KeyCode.LEFT)) {
@@ -63,6 +69,9 @@ public class Main extends Application {
             }
             if (event.getCode().equals(KeyCode.UP)) {
                 gameData.getKeys().setKey(GameKeys.UP, false);
+            }
+            if (event.getCode().equals(KeyCode.SPACE)) {
+                gameData.getKeys().setKey(GameKeys.SPACE, false);
             }
 
         });
@@ -82,12 +91,15 @@ public class Main extends Application {
         window.setScene(scene);
         window.setTitle("ASTEROIDS");
         window.show();
-
     }
 
     private void render() {
+
+
         new AnimationTimer() {
             private long then = 0;
+
+
 
             @Override
             public void handle(long now) {
@@ -101,6 +113,8 @@ public class Main extends Application {
 
     private void update() {
 
+
+
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
@@ -111,6 +125,15 @@ public class Main extends Application {
     }
 
     private void draw() {
+
+        for (Entity entity : world.getEntities()) {
+            Polygon polygon = new Polygon(entity.getPolygonCoordinates());
+            if(!polygons.containsKey(entity)) {
+                polygons.put(entity, polygon);
+                gameWindow.getChildren().add(polygon);
+            }
+        }
+
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
             polygon.setTranslateX(entity.getX());
