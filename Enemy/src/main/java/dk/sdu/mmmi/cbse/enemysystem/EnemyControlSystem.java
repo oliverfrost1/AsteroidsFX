@@ -22,8 +22,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
             // Don't spawn too many enemies
             Entity enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,10,0,-10,10);
-            enemy.setX(gameData.getDisplayWidth()/2);
-            enemy.setY(gameData.getDisplayHeight()/2);
+            enemy.setX(gameData.getDisplayWidth()*Math.random());
+            enemy.setY(gameData.getDisplayHeight()*Math.random());
             enemy.setRotation((float) (Math.random()*360));
             world.addEntity(enemy);
 
