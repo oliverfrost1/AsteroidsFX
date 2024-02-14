@@ -15,5 +15,5 @@ public interface IPostEntityProcessingService {
      * @precondition The entity processing has been done.
      * @postcondition The post entity processing has been done.
      */
-    void process(GameData gameData, World world);
+    void postProcess(GameData gameData, World world);
 }
