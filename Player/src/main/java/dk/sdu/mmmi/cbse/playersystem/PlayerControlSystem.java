@@ -39,12 +39,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 getBulletSPIs().forEach(bulletSPI -> {
                     Entity bullet = bulletSPI.createBullet(player, gameData);
                     world.addEntity(bullet);
-
                 });
 
             }
 
-            
+
+            // TODO: Move this to own function
         if (player.getX() < 0) {
             player.setX(1);
         }

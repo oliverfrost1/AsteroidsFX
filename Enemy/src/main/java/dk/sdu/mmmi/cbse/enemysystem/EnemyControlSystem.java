@@ -29,6 +29,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         }
 
+
+        // TODO: Move this to own function
         // Process movement for all enemies
         for (Entity enemy : world.getEntities(Enemy.class)) {
 
