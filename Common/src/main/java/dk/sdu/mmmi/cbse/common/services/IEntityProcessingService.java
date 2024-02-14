@@ -14,7 +14,7 @@ public interface IEntityProcessingService {
      * Is not used not drawing the entities.
      * @param gameData
      * @param world
-     * @precondition The last process is done, the last process'.
+     * @precondition The last process is done, and the game is running.
      * @postcondition All the needed processing from the entities has been done.
      */
     void process(GameData gameData, World world);
