@@ -121,13 +121,14 @@ public class Main extends Application {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
-//        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
-//            postEntityProcessorService.process(gameData, world);
-//        }
+        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
+            postEntityProcessorService.process(gameData, world);
+        }
     }
 
     private void draw() {
 
+        // For each entity in world, add to polygons and gameWindow to show them on screen
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             if(!polygons.containsKey(entity)) {
@@ -137,6 +138,7 @@ public class Main extends Application {
             }
         }
 
+        // Remove entities that are not in world anymore
         polygons.forEach((key,value) -> {
             if(!world.getEntities().contains(key)){
                 gameWindow.getChildren().remove(value);
@@ -144,7 +146,7 @@ public class Main extends Application {
             }
         });
 
-
+        // Standard draw logic
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
             polygon.setTranslateX(entity.getX());

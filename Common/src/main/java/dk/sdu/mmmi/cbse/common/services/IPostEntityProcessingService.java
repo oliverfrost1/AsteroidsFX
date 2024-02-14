@@ -5,7 +5,6 @@ import dk.sdu.mmmi.cbse.common.data.World;
 
 /**
  *
- * @author jcs
  */
 public interface IPostEntityProcessingService {
 

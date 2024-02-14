@@ -26,7 +26,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
             enemy.setY(gameData.getDisplayHeight()*Math.random());
             enemy.setRotation((float) (Math.random()*360));
             world.addEntity(enemy);
-
         }
 
 
@@ -56,7 +55,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
             // if not close to edge, adjust direction randomly
             if(enemy.getX() > 0 && enemy.getX() < width && enemy.getY() > 0 && enemy.getY() < height) {
-                if(Math.random()*1000 > 900) {
+                if(Math.random()*10 > 9) {
                     enemy.setRotation(enemy.getRotation() + (Math.random()*1000 > 500 ? 5 : -5));
                 }
             }
