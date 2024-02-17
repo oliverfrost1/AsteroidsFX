@@ -1,23 +1,25 @@
 package dk.sdu.mmmi.cbse.enemy;
 
+import dk.sdu.mmmi.cbse.common.bullet.Bullet;
 import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
-public class EnemyControlSystem implements IEntityProcessingService {
+public class EnemyControlSystem implements IEntityProcessingService, IPostEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         // Amount of enemies
         int amountOfEnemies = world.getEntities(Enemy.class).size();
 
-        if(Math.random()*1000 > 990 && amountOfEnemies < 4) {
+        if(Math.random()*100 > 99 && amountOfEnemies < 4) {
             // Don't spawn too many enemies
             Entity enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,10,0,-10,10);
@@ -61,7 +63,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
 
             // Spawn bullet randomly
-            if(Math.random()*1000 > 990) {
+            if(Math.random()*100 > 99) {
                 getBulletSPIs().forEach(bulletSPI -> {
                     Entity bullet = bulletSPI.createBullet(enemy, gameData);
                     world.addEntity(bullet);
@@ -80,4 +82,20 @@ public class EnemyControlSystem implements IEntityProcessingService {
     }
 
 
+    @Override
+    public void postProcess(GameData gameData, World world) {
+
+        // If hit by bullet, decrease health by 1 and remove bullet
+        for (Entity enemy : world.getEntities(Enemy.class)) {
+            for (Entity bullet : world.getEntities(Bullet.class)) {
+                if(enemy.intersects(bullet)) {
+                    enemy.setHealth(enemy.getHealth()-1);
+                    world.removeEntity(bullet);
+                }
+                if(enemy.getHealth() <= 0) {
+                    world.removeEntity(enemy);
+                }
+            }
+        }
+    }
 }

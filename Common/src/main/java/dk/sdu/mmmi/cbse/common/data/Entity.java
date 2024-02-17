@@ -22,6 +22,14 @@ public class Entity implements Serializable {
         this.health = health;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
 
     public String getID() {
         return ID.toString();

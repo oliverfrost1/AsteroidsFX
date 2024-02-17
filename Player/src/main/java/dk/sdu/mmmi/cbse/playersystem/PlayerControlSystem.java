@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.GameKeys;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
 
 import java.util.Collection;
 import java.util.ServiceLoader;
@@ -14,18 +15,18 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService {
+public class PlayerControlSystem implements IEntityProcessingService, IPostEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-            
+
         for (Entity player : world.getEntities(Player.class)) {
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);                
+                player.setRotation(player.getRotation() - 5);
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);                
+                player.setRotation(player.getRotation() + 5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
                 double changeX = Math.cos(Math.toRadians(player.getRotation()));
@@ -45,27 +46,45 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
 
             // TODO: Move this to own function
-        if (player.getX() < 0) {
-            player.setX(1);
-        }
+            if (player.getX() < 0) {
+                player.setX(1);
+            }
 
-        if (player.getX() > gameData.getDisplayWidth()) {
-            player.setX(gameData.getDisplayWidth()-1);
-        }
+            if (player.getX() > gameData.getDisplayWidth()) {
+                player.setX(gameData.getDisplayWidth() - 1);
+            }
 
-        if (player.getY() < 0) {
-            player.setY(1);
-        }
+            if (player.getY() < 0) {
+                player.setY(1);
+            }
 
-        if (player.getY() > gameData.getDisplayHeight()) {
-            player.setY(gameData.getDisplayHeight()-1);
-        }
-            
-                                        
+            if (player.getY() > gameData.getDisplayHeight()) {
+                player.setY(gameData.getDisplayHeight() - 1);
+            }
+
+
         }
     }
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    @Override
+    public void postProcess(GameData gameData, World world) {
+        // If hit by bullet, decrease health by 1 and remove bullet
+        for (Entity player : world.getEntities(Player.class)) {
+            for (Entity bullet : world.getEntities(Bullet.class)) {
+                if (player.intersects(bullet)) {
+                    System.out.println("Player hit by bullet");
+                    player.setHealth(player.getHealth() - 1);
+                    world.removeEntity(bullet);
+                }
+                if (player.getHealth() <= 0) {
+                    world.removeEntity(player);
+                }
+            }
+        }
+
     }
 }
