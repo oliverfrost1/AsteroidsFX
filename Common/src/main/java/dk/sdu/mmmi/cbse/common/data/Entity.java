@@ -11,7 +11,17 @@ public class Entity implements Serializable {
     private double x;
     private double y;
     private double rotation;
-            
+
+    private int health;
+
+    public Entity() {
+        this.health = 1;
+    }
+
+    public Entity(int health) {
+        this.health = health;
+    }
+
 
     public String getID() {
         return ID.toString();
@@ -51,6 +61,52 @@ public class Entity implements Serializable {
     public double getRotation() {
         return rotation;
     }
+
+
+    public double calculateWidth() {
+        if (polygonCoordinates == null || polygonCoordinates.length < 4) {
+            return 0; // Not enough points to form a polygon
+        }
+        double minX = polygonCoordinates[0];
+        double maxX = polygonCoordinates[0];
+        for (int i = 0; i < polygonCoordinates.length; i += 2) {
+            double x = polygonCoordinates[i];
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+        }
+        return maxX - minX;
+    }
+
+    public double calculateHeight() {
+        if (polygonCoordinates == null || polygonCoordinates.length < 4) {
+            return 0; // Not enough points to form a polygon
+        }
+        double minY = polygonCoordinates[1];
+        double maxY = polygonCoordinates[1];
+        for (int i = 1; i < polygonCoordinates.length; i += 2) {
+            double y = polygonCoordinates[i];
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+        }
+        return maxY - minY;
+    }
+
+    public boolean intersects(Entity other) {
+        // Figure out if they intersect based on height, width and position
+        double thisWidth = this.calculateWidth();
+        double thisHeight = this.calculateHeight();
+        double otherWidth = other.calculateWidth();
+        double otherHeight = other.calculateHeight();
+        double thisX = this.getX();
+        double thisY = this.getY();
+        double otherX = other.getX();
+        double otherY = other.getY();
+        return thisX < otherX + otherWidth &&
+                thisX + thisWidth > otherX &&
+                thisY < otherY + otherHeight &&
+                thisY + thisHeight > otherY;
+    }
+
         
 
 }

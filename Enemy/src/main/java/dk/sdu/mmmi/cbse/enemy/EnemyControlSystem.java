@@ -17,7 +17,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         // Amount of enemies
         int amountOfEnemies = world.getEntities(Enemy.class).size();
 
-        if(Math.random()*1000 > 990 && amountOfEnemies < 10) {
+        if(Math.random()*1000 > 990 && amountOfEnemies < 4) {
             // Don't spawn too many enemies
             Entity enemy = new Enemy();
             enemy.setPolygonCoordinates(-10,-10,10,0,-10,10);
