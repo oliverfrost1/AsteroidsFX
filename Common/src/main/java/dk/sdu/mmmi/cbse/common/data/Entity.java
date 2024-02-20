@@ -3,9 +3,16 @@ package dk.sdu.mmmi.cbse.common.data;
 import java.io.Serializable;
 import java.util.UUID;
 
+
 public class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
+
+    public enum entityType {
+        PLAYER, ENEMY, BULLET, ASTEROID
+    }
+
+    private entityType entityType;
     
     private double[] polygonCoordinates;
     private double x;
@@ -14,12 +21,9 @@ public class Entity implements Serializable {
 
     private int health;
 
-    public Entity() {
+    public Entity(int health, entityType entityType) {
         this.health = 1;
-    }
-
-    public Entity(int health) {
-        this.health = health;
+        this.entityType = entityType;
     }
 
     public void setHealth(int health) {
@@ -30,6 +34,9 @@ public class Entity implements Serializable {
         return health;
     }
 
+    public entityType getEntityType() {
+        return entityType;
+    }
 
     public String getID() {
         return ID.toString();

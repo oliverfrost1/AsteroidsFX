@@ -15,7 +15,7 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 
-public class PlayerControlSystem implements IEntityProcessingService, IPostEntityProcessingService {
+public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
@@ -70,21 +70,4 @@ public class PlayerControlSystem implements IEntityProcessingService, IPostEntit
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
-    @Override
-    public void postProcess(GameData gameData, World world) {
-        // If hit by bullet, decrease health by 1 and remove bullet
-        for (Entity player : world.getEntities(Player.class)) {
-            for (Entity bullet : world.getEntities(Bullet.class)) {
-                if (player.intersects(bullet)) {
-                    System.out.println("Player hit by bullet");
-                    player.setHealth(player.getHealth() - 1);
-                    world.removeEntity(bullet);
-                }
-                if (player.getHealth() <= 0) {
-                    world.removeEntity(player);
-                }
-            }
-        }
-
-    }
 }

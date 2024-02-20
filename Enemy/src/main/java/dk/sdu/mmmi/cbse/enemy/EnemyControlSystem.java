@@ -13,7 +13,7 @@ import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;
 
-public class EnemyControlSystem implements IEntityProcessingService, IPostEntityProcessingService {
+public class EnemyControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         // Amount of enemies
@@ -79,23 +79,5 @@ public class EnemyControlSystem implements IEntityProcessingService, IPostEntity
 
     private Collection<? extends BulletSPI> getBulletSPIs() {
         return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
-
-
-    @Override
-    public void postProcess(GameData gameData, World world) {
-
-        // If hit by bullet, decrease health by 1 and remove bullet
-        for (Entity enemy : world.getEntities(Enemy.class)) {
-            for (Entity bullet : world.getEntities(Bullet.class)) {
-                if(enemy.intersects(bullet)) {
-                    enemy.setHealth(enemy.getHealth()-1);
-                    world.removeEntity(bullet);
-                }
-                if(enemy.getHealth() <= 0) {
-                    world.removeEntity(enemy);
-                }
-            }
-        }
     }
 }
