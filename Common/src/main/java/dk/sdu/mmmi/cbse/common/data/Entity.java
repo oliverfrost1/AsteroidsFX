@@ -22,7 +22,7 @@ public class Entity implements Serializable {
     private int health;
 
     public Entity(int health, entityType entityType) {
-        this.health = 1;
+        this.health = health;
         this.entityType = entityType;
     }
 

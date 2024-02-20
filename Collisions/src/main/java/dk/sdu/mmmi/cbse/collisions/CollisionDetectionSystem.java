@@ -1,6 +1,5 @@
 package dk.sdu.mmmi.cbse.collisions;
 
-import dk.sdu.mmmi.cbse.asteroid.AsteroidControlSystem;
 import dk.sdu.mmmi.cbse.common.asteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
@@ -62,7 +61,17 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
             if (asteroid.getHealth() <= 0) {
                 getAsteroidSPI().forEach(asteroidSPI -> {
                     asteroidSPI.splitAsteroid(asteroid, world);
+
                 });
+            }
+        }
+
+        // If player hits asteroid, remove player
+        for (Entity player : players) {
+            for (Entity asteroid : asteroids) {
+                if (player.intersects(asteroid)) {
+                    world.removeEntity(player);
+                }
             }
         }
 
