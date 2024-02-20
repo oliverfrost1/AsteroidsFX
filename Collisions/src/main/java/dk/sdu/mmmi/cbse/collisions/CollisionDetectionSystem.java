@@ -21,6 +21,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         Entity[] players = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.PLAYER)).toArray(Entity[]::new);
         Entity[] asteroids = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.ASTEROID)).toArray(Entity[]::new);
         Entity[] bullets = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.BULLET)).toArray(Entity[]::new);
+        Entity[] allNonBullets = Arrays.stream(allEntities).filter(entity -> !entity.getEntityType().equals(Entity.entityType.BULLET)).toArray(Entity[]::new);
 
 
         // If player and enemy collide, remove both entities
@@ -36,9 +37,11 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         // If bullet hits entity, decrease the health by one
         for (Entity bullet : bullets) {
-            for (Entity entity : allEntities) {
+            for (Entity entity : allNonBullets) {
                 if (bullet.intersects(entity)) {
                     entity.setHealth(entity.getHealth() - 1);
+                    System.out.println("Removing bullet here");
+                    System.out.println("New health" + entity.getHealth());
                     world.removeEntity(bullet);
                 }
             }
@@ -58,9 +61,14 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         // If asteroid health is 0, split into two smaller asteroids
         for (Entity asteroid : asteroids) {
+            System.out.println("Asteroid health: " + asteroid.getHealth());
+
             if (asteroid.getHealth() <= 0) {
+                System.out.println("Low health detected");
                 getAsteroidSPI().forEach(asteroidSPI -> {
+                    System.out.println("Splitting asteroid");
                     asteroidSPI.splitAsteroid(asteroid, world);
+
 
                 });
             }
@@ -80,7 +88,6 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
     private Collection<? extends AsteroidSPI> getAsteroidSPI() {
         return ServiceLoader.load(AsteroidSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
-
 
 
 }

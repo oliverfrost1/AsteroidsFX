@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class AsteroidControlSystem implements IEntityProcessingService, AsteroidSPI {
 
-    private Random random = new Random();
+    private final Random random = new Random();
     @Override
     public void process(GameData gameData, World world) {
 

@@ -28,17 +28,23 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
-        bullet.setPolygonCoordinates(-5,-1,1,0,-1,1);
+        bullet.setPolygonCoordinates(5,-1,1,0,-1,1);
 
-        // Place bullet in front of shooter
+        // Define an offset distance to spawn the bullet in front of the shooter
+        // This value should be adjusted based on the size of the shooter entity
+        double offsetDistance = 20.0; // Example offset, adjust as needed
 
-        System.out.println(shooter.getHealth());
-        bullet.setX(shooter.getX() + Math.cos(Math.toRadians(shooter.getRotation())));
-        bullet.setY(shooter.getY() + Math.sin(Math.toRadians(shooter.getRotation())));
+        // Calculate the bullet's spawn position based on the shooter's orientation and the offset
+        double spawnX = shooter.getX() + Math.cos(Math.toRadians(shooter.getRotation())) * offsetDistance;
+        double spawnY = shooter.getY() + Math.sin(Math.toRadians(shooter.getRotation())) * offsetDistance;
+
+        bullet.setX(spawnX);
+        bullet.setY(spawnY);
         bullet.setRotation(shooter.getRotation());
 
         return bullet;
     }
+
 
     // TODO: Use this to set shape of bullet based on direction??
     private void setShape(Entity entity) {

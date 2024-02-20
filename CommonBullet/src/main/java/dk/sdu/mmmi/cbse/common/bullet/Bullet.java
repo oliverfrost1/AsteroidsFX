@@ -9,6 +9,6 @@ import dk.sdu.mmmi.cbse.common.data.Entity;
 public class Bullet extends Entity {
 
     public Bullet() {
-        super(1, Entity.entityType.BULLET);
+        super(5, Entity.entityType.BULLET);
     }
 }
