@@ -1,17 +1,16 @@
 package dk.sdu.mmmi.cbse.asteroid;
 
-import dk.sdu.mmmi.cbse.common.bullet.BulletSPI;
+import dk.sdu.mmmi.cbse.common.asteroid.Asteroid;
+import dk.sdu.mmmi.cbse.common.asteroid.AsteroidSPI;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import java.util.Collection;
+
+import java.util.Arrays;
 import java.util.Random;
-import java.util.ServiceLoader;
 
-import static java.util.stream.Collectors.toList;
-
-public class AsteroidControlSystem implements IEntityProcessingService{
+public class AsteroidControlSystem implements IEntityProcessingService, AsteroidSPI {
 
     private Random random = new Random();
     @Override
@@ -69,10 +68,32 @@ public class AsteroidControlSystem implements IEntityProcessingService{
         }
     }
 
-    private Collection<? extends BulletSPI> getBulletSPIs() {
-        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    @Override
+    public void splitAsteroid(Entity asteroid, World world) {
+        double minimumHeight = 20;
+        double minimumWidth = 20;
+
+        // If hit by a bullet, then split into two smaller asteroids
+
+
+        if (asteroid.calculateWidth() > minimumWidth && asteroid.calculateHeight() > minimumHeight) {
+            Entity asteroid1 = new Asteroid();
+            Entity asteroid2 = new Asteroid();
+            double[] polygonCoordinates = Arrays.stream(asteroid.getPolygonCoordinates()).map(point -> point * 0.5).toArray();
+            asteroid1.setPolygonCoordinates(polygonCoordinates);
+            asteroid2.setPolygonCoordinates(polygonCoordinates);
+            asteroid1.setX(asteroid.getX());
+            asteroid1.setY(asteroid.getY());
+            asteroid2.setX(asteroid.getX());
+            asteroid2.setY(asteroid.getY());
+            asteroid1.setRotation(asteroid.getRotation() + 45);
+            asteroid2.setRotation(asteroid.getRotation() - 45);
+            world.addEntity(asteroid1);
+            world.addEntity(asteroid2);
+            world.removeEntity(asteroid);
+        } else {
+            // TODO: Add score here
+            world.removeEntity(asteroid);
+        }
     }
-
-
-
 }
