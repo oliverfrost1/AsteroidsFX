@@ -20,15 +20,20 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             // Move bullet in correct direction
             double changeX = Math.cos(Math.toRadians(bullet.getRotation()));
             double changeY = Math.sin(Math.toRadians(bullet.getRotation()));
-            bullet.setX(bullet.getX() + changeX*1.3);
-            bullet.setY(bullet.getY() + changeY*1.3);
+            bullet.setX(bullet.getX() + changeX*2);
+            bullet.setY(bullet.getY() + changeY*2);
+
+            // If bullet is out of bounds, remove it
+            if (bullet.getX() < 0 || bullet.getX() > gameData.getDisplayWidth() || bullet.getY() < 0 || bullet.getY() > gameData.getDisplayHeight()) {
+                world.removeEntity(bullet);
+            }
         }
     }
 
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
-        bullet.setPolygonCoordinates(5,-1,1,0,-1,1);
+        bullet.setPolygonCoordinates(0,0, 0, 4, 4, 4, 4, 0);
 
         // Define an offset distance to spawn the bullet in front of the shooter
         // This value should be adjusted based on the size of the shooter entity
@@ -41,6 +46,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         bullet.setX(spawnX);
         bullet.setY(spawnY);
         bullet.setRotation(shooter.getRotation());
+
+
 
         return bullet;
     }

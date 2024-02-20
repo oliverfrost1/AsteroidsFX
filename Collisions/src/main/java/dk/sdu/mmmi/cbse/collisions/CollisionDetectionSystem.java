@@ -40,8 +40,6 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
             for (Entity entity : allNonBullets) {
                 if (bullet.intersects(entity)) {
                     entity.setHealth(entity.getHealth() - 1);
-                    System.out.println("Removing bullet here");
-                    System.out.println("New health" + entity.getHealth());
                     world.removeEntity(bullet);
                 }
             }
@@ -61,12 +59,9 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         // If asteroid health is 0, split into two smaller asteroids
         for (Entity asteroid : asteroids) {
-            System.out.println("Asteroid health: " + asteroid.getHealth());
 
             if (asteroid.getHealth() <= 0) {
-                System.out.println("Low health detected");
                 getAsteroidSPI().forEach(asteroidSPI -> {
-                    System.out.println("Splitting asteroid");
                     asteroidSPI.splitAsteroid(asteroid, world);
 
 

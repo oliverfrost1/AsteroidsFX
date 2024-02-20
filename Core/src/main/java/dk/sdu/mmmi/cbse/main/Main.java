@@ -41,7 +41,6 @@ public class Main extends Application {
     @Override
     public void start(Stage window) throws Exception {
         window.setResizable(false);
-        System.out.println("logging start");
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow = new Pane();
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
