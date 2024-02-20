@@ -34,4 +34,6 @@ replay_pid*
 /Collisions/target/
 /Enemy/target/
 
+target/
+
 /.idea/
