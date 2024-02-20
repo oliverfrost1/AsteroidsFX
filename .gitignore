@@ -33,7 +33,7 @@ replay_pid*
 /Asteroid/target/
 /Collisions/target/*
 /Enemy/target/
-
+*/target/
 target/
 
 /.idea/
