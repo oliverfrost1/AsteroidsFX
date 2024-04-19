@@ -5,6 +5,6 @@ module Collisions {
     requires Common;
     requires Asteroid;
     requires CommonAsteroid;
-    provides IPostEntityProcessingService with dk.sdu.mmmi.cbse.collisions.CollisionDetectionSystem;
+    provides IPostEntityProcessingService with dk.sdu.mmmi.cbse.collisions.CollisionDetectionSystem, dk.sdu.mmmi.cbse.collisions.TestingSplitPackages;
     uses AsteroidSPI;
 }

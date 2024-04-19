@@ -7,17 +7,20 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
+
+import java.lang.module.Configuration;
+import java.lang.module.ModuleDescriptor;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 import static java.util.stream.Collectors.toList;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -32,9 +35,25 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
 
     private Pane gameWindow;
-    
+    private static ModuleLayer layer;
+
 
     public static void main(String[] args) {
+        Path pluginsDirectory = Paths.get("plugins");
+
+        ModuleFinder pluginFinder = ModuleFinder.of(pluginsDirectory);
+        // Find all plugins in the plugins directory
+        List<String> allPlugins = pluginFinder.findAll().stream().map(ModuleReference::descriptor).map(ModuleDescriptor::name).collect(toList());
+        // Print all plugins
+        allPlugins.forEach(System.out::println);
+
+        // Load all plugins
+        Configuration pluginConfiguration = ModuleLayer.boot().configuration().resolve(pluginFinder, ModuleFinder.of(), allPlugins);
+
+        // Module layer for plugins
+        layer = ModuleLayer.boot().defineModulesWithOneLoader(pluginConfiguration, ClassLoader.getSystemClassLoader());
+
+
         launch(Main.class);
     }
 
@@ -101,7 +120,6 @@ public class Main extends Application {
             private long then = 0;
 
 
-
             @Override
             public void handle(long now) {
                 update();
@@ -113,7 +131,6 @@ public class Main extends Application {
     }
 
     private void update() {
-
 
 
         // Update
@@ -130,7 +147,7 @@ public class Main extends Application {
         // For each entity in world, add to polygons and gameWindow to show them on screen
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
-            if(!polygons.containsKey(entity)) {
+            if (!polygons.containsKey(entity)) {
                 polygons.put(entity, polygon);
 
                 gameWindow.getChildren().add(polygon);
@@ -138,8 +155,8 @@ public class Main extends Application {
         }
 
         // Remove entities that are not in world anymore
-        polygons.forEach((key,value) -> {
-            if(!world.getEntities().contains(key)){
+        polygons.forEach((key, value) -> {
+            if (!world.getEntities().contains(key)) {
                 gameWindow.getChildren().remove(value);
                 polygons.remove(key);
             }
@@ -155,14 +172,15 @@ public class Main extends Application {
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(layer, IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(layer, IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(layer, IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
+
 }
