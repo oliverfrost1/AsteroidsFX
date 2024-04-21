@@ -23,48 +23,59 @@ public class PlayerControlSystem implements IEntityProcessingService {
         for (Entity player : world.getEntities(Player.class)) {
 
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
-                player.setRotation(player.getRotation() - 5);
+                rotateLeft(player);
             }
 
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
-                player.setRotation(player.getRotation() + 5);
+                rotateRight(player);
             }
 
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+                moveForward(player);
             }
-
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
-                getBulletSPIs().forEach(bulletSPI -> {
-                    Entity bullet = bulletSPI.createBullet(player, gameData);
-                    world.addEntity(bullet);
-                });
-
+                fireBullet(player, gameData, world);
             }
 
+            checkWithinBounds(player, gameData);
+        }
+    }
 
-            // TODO: Move this to own function
-            if (player.getX() < 0) {
-                player.setX(1);
-            }
+    private void rotateRight(Entity player) {
+        player.setRotation(player.getRotation() + 5);
+    }
 
-            if (player.getX() > gameData.getDisplayWidth()) {
-                player.setX(gameData.getDisplayWidth() - 1);
-            }
+    private void rotateLeft(Entity player) {
+        player.setRotation(player.getRotation() - 5);
+    }
 
-            if (player.getY() < 0) {
-                player.setY(1);
-            }
+    private void moveForward(Entity player) {
+        double changeX = Math.cos(Math.toRadians(player.getRotation()));
+        double changeY = Math.sin(Math.toRadians(player.getRotation()));
+        player.setX(player.getX() + changeX);
+        player.setY(player.getY() + changeY);
+    }
 
-            if (player.getY() > gameData.getDisplayHeight()) {
-                player.setY(gameData.getDisplayHeight() - 1);
-            }
+    private void fireBullet(Entity entity, GameData gameData, World world) {
+        getBulletSPIs().forEach(bulletSPI -> {
+            Entity bullet = bulletSPI.createBullet(entity, gameData);
+            world.addEntity(bullet);
+        });
+    }
 
-
+    private void checkWithinBounds(Entity player, GameData gameData) {
+        if (player.getX() < 0) {
+            player.setX(1);
+        }
+        if (player.getX() > gameData.getDisplayWidth()) {
+            player.setX(gameData.getDisplayWidth() - 1);
+        }
+        if (player.getY() < 0) {
+            player.setY(1);
+        }
+        if (player.getY() > gameData.getDisplayHeight()) {
+            player.setY(gameData.getDisplayHeight() - 1);
         }
     }
 

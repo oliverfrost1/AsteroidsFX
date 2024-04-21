@@ -7,14 +7,9 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
 public class BulletPlugin implements IGamePluginService {
-
-    private Entity bullet;
-
     @Override
     public void start(GameData gameData, World world) {
-
     }
-
     @Override
     public void stop(GameData gameData, World world) {
         for (dk.sdu.mmmi.cbse.common.data.Entity entity : world.getEntities()) {
