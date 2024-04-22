@@ -18,10 +18,7 @@ import javafx.stage.Stage;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author Oliver Frost
@@ -36,9 +33,9 @@ public class Game {
     private final List<IPostEntityProcessingService> postEntityProcessingServices;
 
     Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServices, List<IPostEntityProcessingService> postEntityProcessingServices) {
-      this.gamePluginServices = gamePluginServices;
-      this.entityProcessingServiceList = entityProcessingServices;
-      this.postEntityProcessingServices = postEntityProcessingServices;
+        this.gamePluginServices = gamePluginServices;
+        this.entityProcessingServiceList = entityProcessingServices;
+        this.postEntityProcessingServices = postEntityProcessingServices;
     }
 
     public void start(Stage window) throws Exception {
@@ -103,7 +100,6 @@ public class Game {
             private long then = 0;
 
 
-
             @Override
             public void handle(long now) {
                 update();
@@ -115,7 +111,6 @@ public class Game {
     }
 
     private void update() {
-
 
 
         // Update
@@ -132,7 +127,7 @@ public class Game {
         // For each entity in world, add to polygons and gameWindow to show them on screen
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
-            if(!polygons.containsKey(entity)) {
+            if (!polygons.containsKey(entity)) {
                 polygons.put(entity, polygon);
 
                 gameWindow.getChildren().add(polygon);
@@ -140,8 +135,8 @@ public class Game {
         }
 
         // Remove entities that are not in world anymore
-        polygons.forEach((key,value) -> {
-            if(!world.getEntities().contains(key)){
+        polygons.forEach((key, value) -> {
+            if (!world.getEntities().contains(key)) {
                 gameWindow.getChildren().remove(value);
                 polygons.remove(key);
             }
@@ -159,6 +154,7 @@ public class Game {
     private Collection<IGamePluginService> getGamePluginServices() {
         return gamePluginServices;
     }
+
     private Collection<IEntityProcessingService> getEntityProcessingServices() {
         return entityProcessingServiceList;
     }
