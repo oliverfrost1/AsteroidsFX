@@ -38,7 +38,7 @@ public class Game {
         this.postEntityProcessingServices = postEntityProcessingServices;
     }
 
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
         window.setResizable(false);
         Text text = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow = new Pane();
@@ -99,14 +99,12 @@ public class Game {
         new AnimationTimer() {
             private long then = 0;
 
-
             @Override
             public void handle(long now) {
                 update();
                 draw();
                 gameData.getKeys().update();
             }
-
         }.start();
     }
 

@@ -13,9 +13,15 @@ import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
 public class CollisionDetectionSystem implements IPostEntityProcessingService {
+
+    private IScoreUtil scoreUtil;
+
+    public CollisionDetectionSystem() {
+        this.scoreUtil = new ScoreUtil();
+    }
+
     @Override
     public void postProcess(GameData gameData, World world) {
-
         Entity[] allEntities = world.getEntities().toArray(new Entity[0]);
         Entity[] enemies = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.ENEMY)).toArray(Entity[]::new);
         Entity[] players = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.PLAYER)).toArray(Entity[]::new);
@@ -49,6 +55,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         for (Entity entity : players) {
             if (entity.getHealth() <= 0) {
                 world.removeEntity(entity);
+                scoreUtil.addToScore(-51);
             }
         }
         for (Entity entity : enemies) {
@@ -59,12 +66,15 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         // If asteroid health is 0, split into two smaller asteroids
         for (Entity asteroid : asteroids) {
-
             if (asteroid.getHealth() <= 0) {
                 getAsteroidSPI().forEach(asteroidSPI -> {
-                    asteroidSPI.splitAsteroid(asteroid, world);
-
-
+                    System.out.println("Splitting asteroid");
+                    boolean addScore = asteroidSPI.splitAsteroidOrRemoveIt(asteroid, world);
+                    System.out.println("Splitting asteroid done" + addScore);
+                    if (addScore) {
+                        System.out.println("Adding score");
+                        scoreUtil.addToScore(1);
+                    }
                 });
             }
         }
@@ -83,6 +93,4 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
     private Collection<? extends AsteroidSPI> getAsteroidSPI() {
         return ServiceLoader.load(AsteroidSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
-
-
 }

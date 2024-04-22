@@ -5,6 +5,4 @@ module ScoringSystem {
     requires spring.web;
     requires spring.context;
     requires Common;
-
-
 }
