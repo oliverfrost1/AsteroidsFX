@@ -12,15 +12,20 @@ public class ScoreUtil implements IScoreUtil {
 
     @Override
     public void addToScore(int score) {
+        String jsonPayload = String.format("{\"score\":%d}", score);
         try {
-            client.send(HttpRequest.newBuilder()
+            HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://localhost:8080/score/increment"))
-                    .POST(HttpRequest.BodyPublishers.ofString(String.valueOf(score)))
-                    .build(), HttpResponse.BodyHandlers.ofString());
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
+                    .build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("Score: " + response.body());
         } catch (Exception e) {
             System.out.println("Failed to add score: " + e.getMessage());
         }
     }
+
 
     @Override
     public int getScore() {

@@ -109,8 +109,6 @@ public class Game {
     }
 
     private void update() {
-
-
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
@@ -121,7 +119,6 @@ public class Game {
     }
 
     private void draw() {
-
         // For each entity in world, add to polygons and gameWindow to show them on screen
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());

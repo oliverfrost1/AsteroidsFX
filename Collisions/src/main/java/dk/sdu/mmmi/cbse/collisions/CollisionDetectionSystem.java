@@ -55,12 +55,12 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         for (Entity entity : players) {
             if (entity.getHealth() <= 0) {
                 world.removeEntity(entity);
-                scoreUtil.addToScore(-51);
             }
         }
         for (Entity entity : enemies) {
             if (entity.getHealth() <= 0) {
                 world.removeEntity(entity);
+                scoreUtil.addToScore(5);
             }
         }
 
@@ -68,11 +68,8 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         for (Entity asteroid : asteroids) {
             if (asteroid.getHealth() <= 0) {
                 getAsteroidSPI().forEach(asteroidSPI -> {
-                    System.out.println("Splitting asteroid");
                     boolean addScore = asteroidSPI.splitAsteroidOrRemoveIt(asteroid, world);
-                    System.out.println("Splitting asteroid done" + addScore);
                     if (addScore) {
-                        System.out.println("Adding score");
                         scoreUtil.addToScore(1);
                     }
                 });
