@@ -7,6 +7,14 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Polygon;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.lang.module.Configuration;
 import java.lang.module.ModuleDescriptor;
@@ -19,15 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.stream.Collectors.toList;
 
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Polygon;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
 public class Main extends Application {
 
     private final GameData gameData = new GameData();
@@ -35,7 +34,7 @@ public class Main extends Application {
     private final Map<Entity, Polygon> polygons = new ConcurrentHashMap<>();
 
     private Pane gameWindow;
-    private static ModuleLayer layer;
+    private static final List<ModuleLayer> allLayers = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -43,19 +42,20 @@ public class Main extends Application {
 
         ModuleFinder pluginFinder = ModuleFinder.of(pluginsDirectory);
         // Find all plugins in the plugins directory
-        List<String> allPlugins = pluginFinder.findAll().stream().map(ModuleReference::descriptor).map(ModuleDescriptor::name).collect(toList());
-        // Print all plugins
-        allPlugins.forEach(System.out::println);
-
-        // Load all plugins
-        Configuration pluginConfiguration = ModuleLayer.boot().configuration().resolve(pluginFinder, ModuleFinder.of(), allPlugins);
-
-        // Module layer for plugins
-        layer = ModuleLayer.boot().defineModulesWithOneLoader(pluginConfiguration, ClassLoader.getSystemClassLoader());
-
+        pluginFinder.findAll().stream().map(ModuleReference::descriptor).map(ModuleDescriptor::name).map((plugin) ->
+                createLayer(pluginsDirectory.toString(), plugin)).forEach(allLayers::add);
 
         launch(Main.class);
     }
+
+    private static ModuleLayer createLayer(String from, String... modules) {
+        ModuleFinder finder = ModuleFinder.of(Paths.get(from));
+        Set<String> moduleNames = new HashSet<>(Arrays.asList(modules));
+        Configuration cf = ModuleLayer.boot().configuration().resolve(finder, ModuleFinder.of(), moduleNames);
+        ModuleLayer parent = ModuleLayer.boot();
+        return parent.defineModulesWithOneLoader(cf, ClassLoader.getSystemClassLoader());
+    }
+
 
     @Override
     public void start(Stage window) throws Exception {
@@ -172,15 +172,23 @@ public class Main extends Application {
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(layer, IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return ServiceLoader.load(layer, IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return ServiceLoader.load(layer, IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        List<IPostEntityProcessingService> allIPostEntityProcessingServices = new ArrayList<>();
+
+        ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).forEach(allIPostEntityProcessingServices::add);
+
+        for (ModuleLayer layer : allLayers) {
+            allIPostEntityProcessingServices.addAll(ServiceLoader.load(layer, IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList()));
+        }
+
+        return allIPostEntityProcessingServices;
     }
 
 }
