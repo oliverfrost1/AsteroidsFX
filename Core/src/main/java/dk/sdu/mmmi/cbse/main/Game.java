@@ -7,6 +7,7 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.mmmi.cbse.common.services.IUIProcessingService;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -31,11 +32,13 @@ public class Game {
     private final List<IGamePluginService> gamePluginServices;
     private final List<IEntityProcessingService> entityProcessingServiceList;
     private final List<IPostEntityProcessingService> postEntityProcessingServices;
+    private final List<IUIProcessingService> uiProcessingServices;
 
-    Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServices, List<IPostEntityProcessingService> postEntityProcessingServices) {
+    Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServices, List<IPostEntityProcessingService> postEntityProcessingServices, List<IUIProcessingService> uiProcessingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServices;
         this.postEntityProcessingServices = postEntityProcessingServices;
+        this.uiProcessingServices = uiProcessingServices;
     }
 
     public void start(Stage window) {
@@ -83,6 +86,7 @@ public class Game {
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
             polygons.put(entity, polygon);
+            Text texting = new Text(10, 20, "Destroyed asteroids: 0");
             gameWindow.getChildren().add(polygon);
         }
 
@@ -115,6 +119,9 @@ public class Game {
         }
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.postProcess(gameData, world);
+        }
+        for (IUIProcessingService uiProcessingService : getUIProcessingServices()) {
+            uiProcessingService.processUI(gameWindow);
         }
     }
 
@@ -156,5 +163,9 @@ public class Game {
 
     private Collection<IPostEntityProcessingService> getPostEntityProcessingServices() {
         return postEntityProcessingServices;
+    }
+
+    private Collection<IUIProcessingService> getUIProcessingServices() {
+        return uiProcessingServices;
     }
 }
