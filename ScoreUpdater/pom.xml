@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>dk.sdu.mmmi.cbse.enemysystem</groupId>
+    <groupId>dk.sdu.mmmi.cbse.scoreupdater</groupId>
     <artifactId>ScoreUpdater</artifactId>
     <name>ScoreUpdater</name>
     <packaging>jar</packaging>
@@ -20,9 +20,10 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
             <artifactId>Common</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

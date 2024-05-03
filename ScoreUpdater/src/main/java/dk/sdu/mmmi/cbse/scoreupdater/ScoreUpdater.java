@@ -2,6 +2,7 @@ package dk.sdu.mmmi.cbse.scoreupdater;
 
 import dk.sdu.mmmi.cbse.common.services.IUIProcessingService;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URI;
@@ -16,11 +17,18 @@ public class ScoreUpdater implements IUIProcessingService {
 
     @Override
     public void processUI(Pane gameWindow) {
-
-
         updateScore();
-        gameWindow.getChildren().clear();
-        gameWindow.getChildren().add(new javafx.scene.text.Text("Score: " + getScore()));
+        Text scoreText = (Text) gameWindow.lookup("#score");
+        System.out.println("scoretext: " + scoreText);
+        if (scoreText != null) {
+            scoreText.setText("Score: " + getScore());
+        } else {
+            scoreText = new javafx.scene.text.Text(10, 10, "Score: " + getScore());
+            scoreText.setId("score");
+            gameWindow.getChildren().add(scoreText);
+        }
+
+
     }
 
     private void updateScore() {
