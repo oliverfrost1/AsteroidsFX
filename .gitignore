@@ -37,3 +37,4 @@ replay_pid*
 target/
 
 /.idea/
+!/plugins/*.jar
