@@ -59,12 +59,12 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
 
         // If asteroid health is 0, split into two smaller asteroids
         for (Entity asteroid : asteroids) {
-
             if (asteroid.getHealth() <= 0) {
                 getAsteroidSPI().forEach(asteroidSPI -> {
-                    asteroidSPI.splitAsteroid(asteroid, world);
-
-
+                    boolean wasRemoved = asteroidSPI.splitAsteroidOrRemoveIt(asteroid, world);
+                    if (wasRemoved) {
+                        gameData.setScore(gameData.getScore() + 1);
+                    }
                 });
             }
         }

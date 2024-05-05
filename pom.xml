@@ -20,14 +20,15 @@
         <module>Asteroid</module>
         <module>Collisions</module>
         <module>CommonAsteroid</module>
+        <module>ScoreUpdater</module>
     </modules>
     <properties>
         <java>java</java>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>        
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.9</maven.compiler.source>
         <maven.compiler.target>1.9</maven.compiler.target>
     </properties>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -36,7 +37,7 @@
                 <version>21.0.2</version>
             </dependency>
         </dependencies>
-    </dependencyManagement>    
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>

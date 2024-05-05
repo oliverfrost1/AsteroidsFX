@@ -2,9 +2,11 @@ package dk.sdu.mmmi.cbse.common.data;
 
 public class GameData {
 
-    private int displayWidth  = 800 ;
+    private int displayWidth = 800;
     private int displayHeight = 800;
     private final GameKeys keys = new GameKeys();
+
+    private int score = 0;
 
 
     public GameKeys getKeys() {
@@ -28,4 +30,11 @@ public class GameData {
     }
 
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }
