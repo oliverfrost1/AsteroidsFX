@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
 public interface IUIProcessingService {
 
     /**
-     * Called after the entity post processing has been done.
+     * Called after the entity post processing has been done. Handles the UI processing.
      *
      * @param gameWindow
      * @param gameData
