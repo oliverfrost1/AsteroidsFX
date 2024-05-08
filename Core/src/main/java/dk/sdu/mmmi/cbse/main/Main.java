@@ -37,7 +37,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
         window.setResizable(false);
         gameWindow = new Pane();
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
@@ -116,7 +116,6 @@ public class Main extends Application {
             gameData.setResetAndStartGame(false);
             gameData.setScore(0);
         }
-
 
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
