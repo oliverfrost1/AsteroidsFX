@@ -14,7 +14,7 @@ public interface IUIProcessingService {
      * @param gameWindow
      * @param gameData
      * @precondition The entity processing has been done.
-     * @postcondition The post entity processing has been done.
+     * @postcondition The UI processing has been done.
      */
     void processUI(Pane gameWindow, GameData gameData);
 }

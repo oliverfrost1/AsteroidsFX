@@ -13,5 +13,5 @@ public interface AsteroidSPI {
      * @precondition asteroid is not null and world is not null
      * @postcondition asteroid is removed from the world and two new asteroids are added to the world
      */
-    public boolean splitAsteroidOrRemoveIt(Entity asteroid, World world);
+    boolean splitAsteroidOrRemoveIt(Entity asteroid, World world);
 }
