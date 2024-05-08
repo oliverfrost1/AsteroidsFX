@@ -7,6 +7,8 @@ public class GameData {
     private final GameKeys keys = new GameKeys();
 
     private int score = 0;
+    private boolean isGameOver = false;
+    private boolean resetAndStartGame = false;
 
 
     public GameKeys getKeys() {
@@ -36,5 +38,21 @@ public class GameData {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        isGameOver = gameOver;
+    }
+
+    public boolean isResetAndStartGame() {
+        return resetAndStartGame;
+    }
+
+    public void setResetAndStartGame(boolean resetAndStartGame) {
+        this.resetAndStartGame = resetAndStartGame;
     }
 }

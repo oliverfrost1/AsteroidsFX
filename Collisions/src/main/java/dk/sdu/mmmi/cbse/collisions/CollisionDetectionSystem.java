@@ -30,6 +30,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
                 if (player.intersects(enemy)) {
                     world.removeEntity(enemy);
                     world.removeEntity(player);
+                    gameData.setGameOver(true);
                 }
             }
         }
@@ -49,6 +50,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
         for (Entity entity : players) {
             if (entity.getHealth() <= 0) {
                 world.removeEntity(entity);
+                gameData.setGameOver(true);
             }
         }
         for (Entity entity : enemies) {
@@ -74,6 +76,7 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
             for (Entity asteroid : asteroids) {
                 if (player.intersects(asteroid)) {
                     world.removeEntity(player);
+                    gameData.setGameOver(true);
                 }
             }
         }

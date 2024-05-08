@@ -21,6 +21,7 @@
         <module>Collisions</module>
         <module>CommonAsteroid</module>
         <module>ScoreUpdater</module>
+        <module>EndGameOptions</module>
     </modules>
     <properties>
         <java>java</java>

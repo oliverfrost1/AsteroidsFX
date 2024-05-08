@@ -76,6 +76,7 @@ public class Main extends Application {
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
             iGamePlugin.start(gameData, world);
+
         }
         for (Entity entity : world.getEntities()) {
             Polygon polygon = new Polygon(entity.getPolygonCoordinates());
@@ -108,6 +109,13 @@ public class Main extends Application {
     }
 
     private void update() {
+        if (gameData.isResetAndStartGame()) {
+            for (IGamePluginService iGamePlugin : getPluginServices()) {
+                iGamePlugin.start(gameData, world);
+            }
+            gameData.setResetAndStartGame(false);
+            gameData.setScore(0);
+        }
 
 
         // Update
@@ -116,6 +124,11 @@ public class Main extends Application {
         }
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.postProcess(gameData, world);
+        }
+        if (gameData.isGameOver()) {
+            for (IGamePluginService iGamePlugin : getPluginServices()) {
+                iGamePlugin.stop(gameData, world);
+            }
         }
     }
 

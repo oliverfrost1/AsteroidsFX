@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
  * @author jcs
  */
 public class World {
@@ -24,6 +23,9 @@ public class World {
     }
 
     public void removeEntity(Entity entity) {
+        if (entity == null) {
+            return;
+        }
         entityMap.remove(entity.getID());
     }
 
