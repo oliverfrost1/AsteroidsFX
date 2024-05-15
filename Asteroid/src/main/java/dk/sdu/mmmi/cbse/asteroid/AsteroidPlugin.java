@@ -14,7 +14,7 @@ public class AsteroidPlugin implements IGamePluginService {
     @Override
     public void stop(GameData gameData, World world) {
         for (dk.sdu.mmmi.cbse.common.data.Entity entity : world.getEntities()) {
-            if (entity.getEntityType() == Entity.entityType.ASTEROID) {
+            if (entity.getEntityType() == Entity.EntityType.ASTEROID) {
                 world.removeEntity(entity);
             }
         }

@@ -13,7 +13,7 @@ public class BulletPlugin implements IGamePluginService {
     @Override
     public void stop(GameData gameData, World world) {
         for (dk.sdu.mmmi.cbse.common.data.Entity entity : world.getEntities()) {
-            if (entity.getEntityType() == Entity.entityType.BULLET) {
+            if (entity.getEntityType() == Entity.EntityType.BULLET) {
                 world.removeEntity(entity);
             }
         }

@@ -17,7 +17,7 @@ public class EnemyPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world) {
         // Remove all of type enemy
         for (dk.sdu.mmmi.cbse.common.data.Entity entity : world.getEntities()) {
-            if (entity.getEntityType() == Entity.entityType.ENEMY) {
+            if (entity.getEntityType() == Entity.EntityType.ENEMY) {
                 world.removeEntity(entity);
             }
         }

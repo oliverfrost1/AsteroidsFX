@@ -8,12 +8,12 @@ public class Entity implements Serializable {
 
     private final UUID ID = UUID.randomUUID();
 
-    public enum entityType {
+    public enum EntityType {
         PLAYER, ENEMY, BULLET, ASTEROID
     }
 
-    private entityType entityType;
-    
+    private final EntityType entityType;
+
     private double[] polygonCoordinates;
     private double x;
     private double y;
@@ -21,7 +21,7 @@ public class Entity implements Serializable {
 
     private int health;
 
-    public Entity(int health, entityType entityType) {
+    public Entity(int health, EntityType entityType) {
         this.health = health;
         this.entityType = entityType;
     }
@@ -34,7 +34,7 @@ public class Entity implements Serializable {
         return health;
     }
 
-    public entityType getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
@@ -43,24 +43,24 @@ public class Entity implements Serializable {
     }
 
 
-    public void setPolygonCoordinates(double... coordinates ) {
+    public void setPolygonCoordinates(double... coordinates) {
         this.polygonCoordinates = coordinates;
     }
 
     public double[] getPolygonCoordinates() {
         return polygonCoordinates;
     }
-       
+
 
     public void setX(double x) {
-        this.x =x;
+        this.x = x;
     }
 
     public double getX() {
         return x;
     }
 
-    
+
     public void setY(double y) {
         this.y = y;
     }
@@ -122,6 +122,5 @@ public class Entity implements Serializable {
                 thisY + thisHeight > otherY;
     }
 
-        
 
 }

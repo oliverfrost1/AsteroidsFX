@@ -17,11 +17,11 @@ public class CollisionDetectionSystem implements IPostEntityProcessingService {
     public void postProcess(GameData gameData, World world) {
 
         Entity[] allEntities = world.getEntities().toArray(new Entity[0]);
-        Entity[] enemies = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.ENEMY)).toArray(Entity[]::new);
-        Entity[] players = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.PLAYER)).toArray(Entity[]::new);
-        Entity[] asteroids = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.ASTEROID)).toArray(Entity[]::new);
-        Entity[] bullets = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.entityType.BULLET)).toArray(Entity[]::new);
-        Entity[] allNonBullets = Arrays.stream(allEntities).filter(entity -> !entity.getEntityType().equals(Entity.entityType.BULLET)).toArray(Entity[]::new);
+        Entity[] enemies = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.EntityType.ENEMY)).toArray(Entity[]::new);
+        Entity[] players = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.EntityType.PLAYER)).toArray(Entity[]::new);
+        Entity[] asteroids = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.EntityType.ASTEROID)).toArray(Entity[]::new);
+        Entity[] bullets = Arrays.stream(allEntities).filter(entity -> entity.getEntityType().equals(Entity.EntityType.BULLET)).toArray(Entity[]::new);
+        Entity[] allNonBullets = Arrays.stream(allEntities).filter(entity -> !entity.getEntityType().equals(Entity.EntityType.BULLET)).toArray(Entity[]::new);
 
 
         // If player and enemy collide, remove both entities
