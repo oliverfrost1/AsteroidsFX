@@ -13,15 +13,15 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            if (bullet.getX() < 0 ||bullet.getX() > gameData.getDisplayWidth()||bullet.getY() < 0 ||bullet.getY() > gameData.getDisplayHeight()) {
+            if (bullet.getX() < 0 || bullet.getX() > gameData.getDisplayWidth() || bullet.getY() < 0 || bullet.getY() > gameData.getDisplayHeight()) {
                 world.removeEntity(bullet);
             }
 
             // Move bullet in correct direction
             double changeX = Math.cos(Math.toRadians(bullet.getRotation()));
             double changeY = Math.sin(Math.toRadians(bullet.getRotation()));
-            bullet.setX(bullet.getX() + changeX*2);
-            bullet.setY(bullet.getY() + changeY*2);
+            bullet.setX(bullet.getX() + changeX * 2);
+            bullet.setY(bullet.getY() + changeY * 2);
 
             // If bullet is out of bounds, remove it
             if (bullet.getX() < 0 || bullet.getX() > gameData.getDisplayWidth() || bullet.getY() < 0 || bullet.getY() > gameData.getDisplayHeight()) {
@@ -33,20 +33,16 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public Entity createBullet(Entity shooter, GameData gameData) {
         Entity bullet = new Bullet();
-        bullet.setPolygonCoordinates(0,0, 0, 4, 4, 4, 4, 0);
+        bullet.setPolygonCoordinates(0, 0, 0, 4, 4, 4, 4, 0);
 
-        // Define an offset distance to spawn the bullet in front of the shooter
-        // This value should be adjusted based on the size of the shooter entity
-        double offsetDistance = 20.0; // Example offset, adjust as needed
+        double offsetDistance = 20.0;
 
-        // Calculate the bullet's spawn position based on the shooter's orientation and the offset
         double spawnX = shooter.getX() + Math.cos(Math.toRadians(shooter.getRotation())) * offsetDistance;
         double spawnY = shooter.getY() + Math.sin(Math.toRadians(shooter.getRotation())) * offsetDistance;
 
         bullet.setX(spawnX);
         bullet.setY(spawnY);
         bullet.setRotation(shooter.getRotation());
-
 
 
         return bullet;
